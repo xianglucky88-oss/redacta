@@ -1,0 +1,1 @@
+{"people":[{"id":"u1","email":"alice@example.test","age":31,"city":"Shanghai"},{"id":"u2","email":"bob@example.test","age":35,"city":"Shanghai"},{"id":"u3","email":"carol@example.test","age":71,"city":"Suzhou"}],"visits":[{"person_id":"u1","date":"2026-10-01","note":"contact alice@example.test"},{"person_id":"u3","date":"2026-10-03","note":"call +86 138 0000 0000"}]}
