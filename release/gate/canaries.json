@@ -1,0 +1,21 @@
+{
+  "comment": "Non-sensitive canaries only. Each token is a fake secret/record whose presence inside an artifact, install tree, gate report or subprocess log proves leakage. Tokens are random hex, never real credentials and never used by application code.",
+  "canaries": [
+    {
+      "id": "fake_key_token",
+      "kind": "secret",
+      "value": "redacta-canary-fake-key-7f3a9c1e5b2846d0a1f6e8d3c0b97a54",
+      "plant_as": ".env",
+      "also_env": "REDACTA_GATE_CANARY_SECRET",
+      "scan_filenames": [".env"]
+    },
+    {
+      "id": "fake_release_record",
+      "kind": "data",
+      "value": "redacta-canary-fake-release-2c8e41f7a60b4d9e83c5f127ad6b0e93",
+      "plant_as": "canary-release.jsonl",
+      "also_env": "REDACTA_GATE_CANARY_RECORD",
+      "scan_filenames": ["canary-release.jsonl", "audit.sqlite", "audit.sqlite-wal", "audit.sqlite-shm"]
+    }
+  ]
+}

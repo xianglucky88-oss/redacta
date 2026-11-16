@@ -1,0 +1,26 @@
+# Explicit sdist inclusion list. No recursive wildcards, no implicit
+# discovery: the release gate's source-manifest.json is the authoritative
+# allowlist and the audit stage fails if the sdist contains anything beyond
+# these approved inputs plus setuptools-generated metadata.
+include pyproject.toml
+include README.md
+include MANIFEST.in
+recursive-include src *.py
+recursive-include examples *.json
+
+# Explicit exclusions as defence in depth even though these paths never match
+# an include rule. A future broad include must not silently sweep them in.
+global-exclude .env*
+global-exclude *.sqlite*
+global-exclude *.db
+global-exclude *.jsonl
+global-exclude *.py[cod]
+prune releases
+prune release
+prune dist
+prune build
+prune tests
+prune .git
+prune .venv
+prune venv
+prune __pycache__

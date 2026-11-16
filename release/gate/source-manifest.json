@@ -1,0 +1,150 @@
+{
+  "schema": "redacta-source-manifest/v1",
+  "comment": "Allowlist of every file the release gate may collect. Packaged roles define the PEP 517 source closure; other roles stay in the repository and are refused at artifact audit.",
+  "entries": [
+    {
+      "path": ".gitignore",
+      "role": "dev-automation",
+      "sha256": "9fe12c5030dffb9a38d6be47c46a5c874719b133302d63f2fb10681957ad6cd3",
+      "bytes": 388
+    },
+    {
+      "path": "MANIFEST.in",
+      "role": "packaging-metadata",
+      "sha256": "d3134fc69b1842c10bfe9f01c7a7b3fef72ea2a8756dbbc786b5196cc1388225",
+      "bytes": 785
+    },
+    {
+      "path": "Makefile",
+      "role": "dev-automation",
+      "sha256": "9fcf1428c0b5f5cadfd177b2dcf4d10b1df338d6e7076e705eba1b4330f79d48",
+      "bytes": 1924
+    },
+    {
+      "path": "README.md",
+      "role": "project-doc",
+      "sha256": "42f4d0eb798989dfdd1640a4d837712995857313c931995ae669c11fde9f224a",
+      "bytes": 3456
+    },
+    {
+      "path": "examples/policy.json",
+      "role": "approved-sample",
+      "sha256": "4b860b182b6845665f4d81e248592e6677f63665ef898e6b4536b57aae1943dc",
+      "bytes": 418
+    },
+    {
+      "path": "examples/smoke.py",
+      "role": "test",
+      "sha256": "26f556739bbe58ab324658c79d056719dc22b322e19bf3215f35168a3eb8c4d2",
+      "bytes": 1749
+    },
+    {
+      "path": "examples/tables.json",
+      "role": "approved-sample",
+      "sha256": "a275d039079280f474a32c1eb411697aaac72e2905ab0d678bad84e78fa86144",
+      "bytes": 370
+    },
+    {
+      "path": "pyproject.toml",
+      "role": "packaging-metadata",
+      "sha256": "75f3c13ad78d2779d57e82ab492126262e63d1f8995cc667fddff4ca34d1f0ef",
+      "bytes": 662
+    },
+    {
+      "path": "release/README.md",
+      "role": "gate-doc",
+      "sha256": "3f3351b87a3c6fb713fbb58959b6c4cf300b9bf2ff5cd731056e5f754eaab085",
+      "bytes": 7020
+    },
+    {
+      "path": "release/experiments/run_experiments.py",
+      "role": "gate-script",
+      "sha256": "6639b2b29562da0543c44cd14b5372a8902b42d945e971a41f8739491663708d",
+      "bytes": 13448
+    },
+    {
+      "path": "release/gate/audit.py",
+      "role": "gate-script",
+      "sha256": "431c0049f5594e9f79ae1205b90fb741ec949222378c8c6cfac467c471598c28",
+      "bytes": 17370
+    },
+    {
+      "path": "release/gate/bootstrap_wheelhouse.sh",
+      "role": "gate-script",
+      "sha256": "0ee2d387e78cfffdc507b0afa95a264ba7a63e512f49fbc693f08ecbe75d8b25",
+      "bytes": 5023
+    },
+    {
+      "path": "release/gate/canaries.json",
+      "role": "gate-config",
+      "sha256": "5324bf47a5c286600df55c86a5c2b4f9a53ac4f8fad6edaca662d801eb2721bb",
+      "bytes": 873
+    },
+    {
+      "path": "release/gate/gate_lib.py",
+      "role": "gate-script",
+      "sha256": "10c144cc6d7ae9553dcc8479ef9db72d6be4f3587000b5ba142988ec7f5f8f7c",
+      "bytes": 17815
+    },
+    {
+      "path": "release/gate/gate_run.py",
+      "role": "gate-script",
+      "sha256": "b9d5d6e2315805abc123baae3bb865f2c4f3749f7145c8093bd22f7ce6e37662",
+      "bytes": 12440
+    },
+    {
+      "path": "release/gate/pep517_driver.py",
+      "role": "gate-script",
+      "sha256": "eeb8ce9ead8f7ad129c910e9fd6e424fa7e4821eef6d64687f95ef7b8f6dfa67",
+      "bytes": 2741
+    },
+    {
+      "path": "release/gate/smoke_installed.py",
+      "role": "gate-script",
+      "sha256": "8befd45ca396246bf1131b3d471813c8b55a35d65f87f005626d4cd9eeaadfde",
+      "bytes": 3178
+    },
+    {
+      "path": "release/gate/verify_wheelhouse.sh",
+      "role": "gate-script",
+      "sha256": "ded18d5b6fd180a8ecd4b239e53bd74993f9f85c90443c1be207e513655666fc",
+      "bytes": 945
+    },
+    {
+      "path": "src/redacta/__init__.py",
+      "role": "package-source",
+      "sha256": "0d636142dbbc6867e6101b390ca32a11ce828bd55938cc1d82f979bb3993d4e2",
+      "bytes": 93
+    },
+    {
+      "path": "src/redacta/cli.py",
+      "role": "package-source",
+      "sha256": "93353cedd5f812b519f5c873283437037fda6d7fc7fd8e1d84a2458de8d5d876",
+      "bytes": 1690
+    },
+    {
+      "path": "src/redacta/policy.py",
+      "role": "package-source",
+      "sha256": "a48d560ed2d327617767f542514e03cb575e83f75f31efdeaa4c0dcb8c462b6b",
+      "bytes": 3640
+    },
+    {
+      "path": "src/redacta/release.py",
+      "role": "package-source",
+      "sha256": "d354d6e6d7b38c1b22a3bf6d7d77632aa8fbf3176d99eee7f19036a5a767244f",
+      "bytes": 5615
+    },
+    {
+      "path": "src/redacta/transforms.py",
+      "role": "package-source",
+      "sha256": "e3f007144cddabd45b8834a29fe588e4561224d48f2bc8f38c9ffe01e6bb9b89",
+      "bytes": 2991
+    },
+    {
+      "path": "tests/test_publication.py",
+      "role": "test",
+      "sha256": "5e35c0f42662061cce78441b493738c31fae882c885b4f6843ae94a45e1b5e7c",
+      "bytes": 5976
+    }
+  ]
+}

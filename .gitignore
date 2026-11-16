@@ -6,5 +6,15 @@ build/
 dist/
 *.sqlite*
 .env
+.env.*
 .DS_Store
 releases/
+
+# Offline release gate runtime state. Wheel binaries and generated artifacts
+# are never committed; scripts, the hash lock, manifests and experiment
+# records (JSON) are.
+release/gate/wheelhouse/*.whl
+release/gate/runs/
+release/gate/accepted/
+release/gate/quarantine/
+release/gate/reports/
