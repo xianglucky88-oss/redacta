@@ -1,0 +1,33 @@
+{
+  "protocol": "redacta-synth/1",
+  "seed": 42,
+  "budget": {"node_budget": 1000000, "max_total_rows": 1000000},
+  "tables": {
+    "people": {
+      "rows": 3,
+      "fields": {
+        "id": {"type": "string", "domain": ["syn-1", "syn-2", "syn-3"]},
+        "email": {"type": "string",
+                  "domain": ["a@test.invalid", "b@test.invalid", "c@test.invalid"]},
+        "age": {"type": "integer", "domain": [20, 31, 64]},
+        "city": {"type": "string", "domain": ["TownA", "TownB"]}
+      },
+      "primary_key": ["id"]
+    },
+    "visits": {
+      "rows": 3,
+      "fields": {
+        "person_id": {"type": "string", "domain": ["syn-1", "syn-2", "syn-3"]},
+        "date": {"type": "string",
+                 "domain": ["2026-01-01", "2026-02-02", "2026-03-03"]},
+        "note": {"type": "string",
+                 "domain": ["note alpha", "note beta", "note gamma"]}
+      },
+      "primary_key": ["person_id", "date"],
+      "foreign_keys": [
+        {"fields": ["person_id"], "table": "people",
+         "target_fields": ["id"], "nullable": false}
+      ]
+    }
+  }
+}

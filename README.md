@@ -33,6 +33,64 @@ python3 examples/smoke.py
 
 `policy.py` 负责闭合字段契约、关联规则和策略指纹；`transforms.py` 负责确定性变换；`release.py` 负责抑制、文件交付和状态；`cli.py` 读取 JSON。
 
+## 合成数据生成器（仅人工规格，不脱敏真实数据）
+
+演示或复现多表问题时，不应拿真实数据再脱敏。`redacta.synth` 是一个**只接受人工合成规格**的多表生成器：产物是可供现有 JSON 表入口（`publish`）消费的**原始合成表**，不是 release、策略版本或脱敏报告。它不读取真实行、不读取 HMAC 密钥，也不把 Policy 当成生成约束语言；导入闭包与 `release/transforms/policy/hmac` 完全分离（父包采用惰性导入保证这一点）。
+
+### 规格语言（独立于 Policy）
+
+每张表独立声明：
+
+- 精确行数 `rows`（可以为 0）；
+- 每个字段的有限候选域 `domain`、类型（`string`/`integer`）与 `nullable`；
+- 非空复合主键 `primary_key`；
+- 复合唯一约束 `unique`（SQL 风格 null 语义：含 null 的元组互不冲突）；
+- 复合外键 `foreign_keys`，目标必须是目标表的主键或唯一组；支持有环引用（含自引用）和同一列受多个外键约束。
+
+确定语义：
+
+- 复合外键**全 null** 时，仅当显式 `"nullable": true` 才不建立引用；**部分 null 一律拒绝**（编译期还要求可空外键的所有列一致可空，消除歧义）；
+- 主键候选域容量不足、空目标表上存在非空引用，均由完整穷尽搜索报告无解；
+- 有环依赖不是错误：外键在整个表集合上见证，允许前向引用，环可被满足；
+- 不把所有环一律当错误，也不存在“按表生成后随便改一个键”的修补步骤。
+
+### 求解、校验与确定性
+
+- **方法**：有限关系模型 + 约束传播 + 确定性回溯。行槽原子地准入完整候选行；唯一索引随回溯同步维护，其他表已接受的行不会被改写；域级传播只剪枝在任何扩展下都不可能满足的候选，不损害完备性。
+- **完备性区分**：完整穷尽才报告无解（`Unsatisfiable`，退出码 3，诊断指出涉及的约束并携带可重放规格）；`node_budget` 耗尽只能报告“未求得”（`BudgetExhausted`，退出码 4），绝不伪装成规格矛盾。
+- **独立校验**：成功产物必须通过不导入求解器、不调用搜索的 `validate_tables`，并绑定结构摘要 `structure_digest` 与协议版本；校验失败不会返回部分表作为成功。
+- **确定性**：同一（规范化规格, seed, 协议版本 `redacta-synth/1`）产生相同数据；改变表/字段/域的输入排列不改变选择；seed 只影响多解时的稳定尝试次序，**不声称均匀采样**。
+
+```bash
+export PYTHONPATH="$PWD/src"
+python3 -m redacta.synth generate examples/synth_spec.json /tmp/tables.json --meta /tmp/meta.json
+python3 -m redacta.synth validate examples/synth_spec.json /tmp/tables.json --meta /tmp/meta.json
+# 把不含任何真实值的合成表作为外部输入交给既有发布入口（黑盒）
+export REDACTA_KEY="$(python3 -c 'import secrets;print(secrets.token_hex(32))')"
+python3 -m redacta.cli --root /tmp/redacta-demo publish /tmp/tables.json examples/synth_policy.json
+```
+
+编程接口：
+
+```python
+from redacta.synth import compile_spec, generate, validate_tables, Unsatisfiable, BudgetExhausted
+
+compiled = compile_spec(spec_document)
+try:
+    result = generate(compiled)
+except Unsatisfiable as exc:
+    diagnose = exc.involved       # 涉及的约束名（不伪造最小冲突集）
+    replay = exc.replay           # 完整可重放规格
+except BudgetExhausted as exc:
+    ...                           # 未求得，不是矛盾
+else:
+    validate_tables(result.tables, compiled,
+                    structure_digest=result.structure_digest, protocol=result.protocol)
+    tables = result.tables        # 可直接 json.dump 后交给 Publisher
+```
+
+`tests/synth_enumeration.py` 是一个与求解器无共享代码的独立有限域枚举器，测试用它在小域上交叉验证有解/无解结论；`tests/test_synth_publisher_smoke.py` 把合成结果作为外部输入黑盒冒烟既有 Publisher，并断言抑制、变换与制品门禁未被改动。
+
 ```python
 from redacta import Policy, Publisher
 from redacta.transforms import Transformer
